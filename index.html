@@ -1,11 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="prog.js" defer></script>
+    <title>Vinizada</title>
 </head>
 <body>
-    
+
+    <!-- Vídeo de fundo -->
+    <div class="video-container">
+        <video autoplay loop muted playsinline>
+            <source src="0_Blue Sky_Clouds_3840x2160.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Formulário -->
+     <br>
+     <br>
+     <br>
+    <div class="form-container">
+        <label for="cep">Consulta CEP</label><br>
+        <input type="text" id="valor" placeholder="CEP"><br><br>
+        <button id="consult">Consultar</button><br><br>
+        <div id="resposta"></div>
+    </div>
+
+    <script>
+        let consult = document.getElementById("consult");
+        consult.addEventListener("click", () => {
+            let valor = document.getElementById('valor').value;
+
+            // Verifica se o valor do CEP não está vazio
+            if (!valor) {
+                alert("Por favor, insira um CEP.");
+                return;
+            }
+
+            fetch(`https://viacep.com.br/ws/${valor}/json/`)
+            .then(res => res.json())
+            .then(dados => {
+                console.log(dados);
+
+                let resposta = document.getElementById('resposta');
+                
+                // Exibe os dados na página
+                resposta.innerHTML = 'Rua: ' + dados.logradouro + '<br>';
+                resposta.innerHTML += 'Estado: ' + dados.uf + '<br>';
+                resposta.innerHTML += 'Bairro: ' + dados.bairro + '<br>';
+
+                // Criando um novo elemento de parágrafo para mostrar o logradouro
+                let res = document.createElement('p');
+                res.setAttribute('id', 'valor');
+                res.setAttribute('class', 'paragraf');
+                resposta.appendChild(res);
+                res.textContent = 'Rua: ' + dados.logradouro;
+                res.style.color = 'purple';
+            })
+            .catch(error => {
+                console.error("Erro ao consultar o CEP:", error);
+                alert("Ocorreu um erro na consulta. Tente novamente.");
+            });
+        });
+    </script>
+
 </body>
 </html>
